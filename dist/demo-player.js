@@ -68,7 +68,7 @@
             return this.states.playHash[this.resolveTimeId(timeId).idIndex];
         },
         videoUrl: function (file, base) {
-            return this.opts.base + file;
+            return this.opts.baseUrl + file;
         },
         resetToNulls: function (object, keys) {
             keys.map(function (key) {
@@ -86,7 +86,7 @@
         init: function ($container, opts) {
             opts = opts || {};
             opts.duration = opts.duration || defaultOpts.duration;
-            opts.baseUrl = opts.duration || defaultOpts.baseUrl;
+            opts.baseUrl = opts.baseUrl || defaultOpts.baseUrl;
             methods.opts = this.opts = opts;
             methods.states = states;
 
