@@ -27,13 +27,14 @@
             });
             return hash;
         },
-        trySetDurationOfLastClip: function(duration, clipIndex) {
+        trySetDurationOfLastClip: function(duration, clipIndex, setPercentage) {
             if (!states.lastDurationSet && clipIndex == states.playList.length - 1) {
                 var opts = this.opts;
 
                 states.lastDuration = duration;
                 states.lastDurationSet = true;
                 states.total = states.total - opts.duration + duration;
+                setPercentage();
             }
         },
         resolveTimeId: function (timeId) {
@@ -186,7 +187,9 @@
         initVideoEvents: function (video) {
             var self = this;
             video.addEventListener('loadeddata', function () {
-                methods.trySetDurationOfLastClip(video.duration, video.clipIndex);
+                methods.trySetDurationOfLastClip(video.duration, video.clipIndex, function() {
+                    self.setPercentage(video.timeId + video.currentTime);
+                });
                 video.playSecondOnLoaded && video.playSecondOnLoaded();
             });
 
@@ -212,6 +215,7 @@
         },
         setPlayList: function (playList, baseUrl) {
             var opts = this.opts;
+            states.lastDurationSet = false;
             states.playList = playList;
             states.playHash = methods.processPlayListHash(playList);
             states.total = playList.length * this.opts.duration;
