@@ -86,7 +86,7 @@
         init: function ($container, opts) {
             opts = opts || {};
             opts.duration = opts.duration || defaultOpts.duration;
-            opts.baseUrl = opts.baseUrl || defaultOpts.baseUrl;
+            opts.baseUrl = opts.duration || defaultOpts.baseUrl;
             methods.opts = this.opts = opts;
             methods.states = states;
 
@@ -190,12 +190,13 @@
                 //    states.total
                 //);
 
-                self.setPercentage(video.timeId + video.currentTime)
+                self.setPercentage(video.timeId + video.currentTime, video.duration)
             });
         },
-        setPercentage: function (timeId) {
+        setPercentage: function (timeId, currentDuration) {
+            var opts = this.opts;
             var second = methods.timeIdToSecond(timeId);
-            var percetage = second >= 0 ? (second / states.total) * 100 + '%' : '100%';
+            var percetage = second >= 0 ? (second / (states.total - opts.duration + currentDuration)) * 100 + '%' : '100%';
             states.$handle.css('left', percetage);
             states.$played.css('width', percetage);
         },
